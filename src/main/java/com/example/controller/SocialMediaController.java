@@ -19,7 +19,14 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("message")
+//@RequestMapping("account")
 public class SocialMediaController {
+
+    private AccountService accountService;
+    public SocialMediaController(AccountService accountService){
+        this.accountService = accountService;
+    }
+
     private MessageService messageService;
     public SocialMediaController(MessageService messageService){
         this.messageService = messageService;
