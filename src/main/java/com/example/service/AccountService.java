@@ -5,6 +5,7 @@ import com.example.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class AccountService {
     AccountRepository accountRepository;
@@ -16,6 +17,14 @@ public class AccountService {
 
      //1. Process new User registrations.
      public Account addUserAccount(Account account){
+        String username = account.getUsername(); 
+        String password = account.getPassword(); 
+        if(username.isEmpty() || password.length() < 4){ 
+            throw new IllegalArgumentException("Invalid username or password"); 
+        }
+        if(accountRepository.findByUsername(username) != null){
+            return null;
+        }
         return accountRepository.save(account);
     }
 
@@ -28,8 +37,4 @@ public class AccountService {
         }
         return accountRepository.findByUsernameAndPassword(username, password);
      }
-
-
-
-
 }

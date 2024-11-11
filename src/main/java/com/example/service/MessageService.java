@@ -19,8 +19,14 @@ public class MessageService {
 
     //3. Add a new message.
     public Message addMessage(Message message){
+        String textOfMessage = message.getMessageText();
+        int size = textOfMessage.length(); 
+        if (size>0 && size<=255){
         return messageRepository.save(message);
-    }
+    }else{ 
+            return null; 
+        } 
+    } 
 
     //4. Retrieve all messages. 
     public List<Message> getAllMessages(){
@@ -40,7 +46,6 @@ public class MessageService {
     public void deleteMessageById(int message_id){
         messageRepository.deleteById(message_id);
     }   
-    
     
     //7. Update a message text identified by a message ID.
     public Message updateMessageById(int message_id, Message message){
