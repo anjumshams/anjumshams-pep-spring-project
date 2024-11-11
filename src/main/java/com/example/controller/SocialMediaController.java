@@ -16,7 +16,7 @@ import java.util.List;
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
 @Controller
-@RequestMapping("message/account")
+
 public class SocialMediaController {
 
     private AccountService accountService;
@@ -74,30 +74,32 @@ public class SocialMediaController {
     //5. Retrieve a message by its ID.  
     //GET request on the endpoint GET localhost:8080/messages/{messageId}.
     @GetMapping("/messages/{messageId}")
-    public ResponseEntity <Message> getMessageById(@PathVariable int message_id){
-        return ResponseEntity.ok(messageService.getMessageById(message_id));
+    public ResponseEntity <Message> getMessageById(@PathVariable int messageId){
+        return ResponseEntity.ok(messageService.getMessageById(messageId));
     }
 
     //6. Delete a message by its ID
     //DELETE localhost:8080/messages/{messageId}.
     @DeleteMapping("/messages/{messageId}")
-    public ResponseEntity <Void> deleteMessageById(@PathVariable int message_id){
-        messageService.deleteMessageById(message_id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity <Integer> deleteMessageById(@PathVariable int messageId){
+        if(messageService.deleteMessageById(messageId)==null){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.ok(1);
     }
     
     //7. Update a message text identified by a message ID.
     //PATCH request on the endpoint PATCH localhost:8080/messages/{messageId}.
     @PatchMapping("/messages/{messageId}")
-    public ResponseEntity <Message> updateMessageById(@PathVariable int messageId, Message message){
+    public ResponseEntity <Integer> updateMessageById(@PathVariable int messageId, @RequestBody Message message){
        Message updatedMessage = messageService.updateMessageById(messageId, message);
        if(updatedMessage == null){
         return ResponseEntity.status(400).build();
        }
-       return ResponseEntity.ok().build();
+       return ResponseEntity.ok(1);
     }
 
-     //8. Retrieve all messages written by a particular user.
+     ///8. Retrieve all messages written by a particular user.
      //GET localhost:8080/accounts/{accountId}/messages.
     @GetMapping("/accounts/{accountId}/messages")
     public ResponseEntity <List<Message>> getAllMessagesByOneUser(@PathVariable int posted_by){

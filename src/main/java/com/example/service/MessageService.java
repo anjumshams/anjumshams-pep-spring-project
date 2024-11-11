@@ -43,21 +43,35 @@ public class MessageService {
     }
 
     //6. Delete a message identified by a message ID.
-    public void deleteMessageById(int message_id){
+    public Integer deleteMessageById(int message_id){
+        if(getMessageById(message_id)==null){
+            return null;
+        }
+        
         messageRepository.deleteById(message_id);
+        return 1;
     }   
     
     //7. Update a message text identified by a message ID.
     public Message updateMessageById(int message_id, Message message){
+        String textOfMessage = message.getMessageText();
+        int textSize = textOfMessage.length();
+        if(textSize<0 || textSize>255){
+            return null;
+        }
         Optional<Message> optionalMessage = messageRepository.findById(message_id);
         if(optionalMessage.isEmpty()){
             return null;
+        }else{
+            optionalMessage.get().setMessageText(message.getMessageText());
+            return messageRepository.save(optionalMessage.get());
+
         }
-        return messageRepository.save(message);
+    
     }
 
     //8. Retrieve all messages written by a particular user.
     public List<Message> getAllMessagesByOneUser(int posted_by){
-        return messageRepository.findAllById(posted_by);
+        return messageRepository.findAllByPostedBy(posted_by);
     }      
 }
