@@ -57,11 +57,12 @@ public class SocialMediaController {
     //POST localhost:8080/messages.
     @PostMapping("/messages")
     public ResponseEntity <Message> addMessage(@RequestBody Message message){
-        Message newMessage = messageService.addMessage(message);
-        if(newMessage == null){
+        try{
+            Message newMessage = messageService.addMessage(message);
+            return ResponseEntity.ok(newMessage); 
+        }catch(IllegalArgumentException e){
             return ResponseEntity.status(400).build();
-        }
-        return ResponseEntity.ok(newMessage);   
+        }   
     }
 
     //4. Retrieve all messages. 
@@ -102,8 +103,8 @@ public class SocialMediaController {
      ///8. Retrieve all messages written by a particular user.
      //GET localhost:8080/accounts/{accountId}/messages.
     @GetMapping("/accounts/{accountId}/messages")
-    public ResponseEntity <List<Message>> getAllMessagesByOneUser(@PathVariable int posted_by){
-        return ResponseEntity.ok(messageService.getAllMessagesByOneUser(posted_by));   
+    public ResponseEntity <List<Message>> getAllMessagesByOneUser(@PathVariable int accountId){
+        return ResponseEntity.ok(messageService.getAllMessagesByOneUser(accountId));   
     }
 }
    
